@@ -97,8 +97,8 @@ pipeline {
               [$class: 'DynamicReferenceParameter', 
                 choiceType: 'ET_UNORDERED_LIST', 
                 description: 'Details of Maintenance', 
-                name: 'INFO_Maintenance_Details', 
-                referencedParameters: 'INFO_Maintenances', 
+                name: 'INFO_MAINTENANCE_DETAILS', 
+                referencedParameters: 'INFO_MAINTENANCES', 
                 script: [
                   $class: 'GroovyScript',
                   fallbackScript: [
@@ -117,7 +117,7 @@ pipeline {
                     import java.io.OutputStream
                     import java.util.Date
 
-                    def api_token = INFO_MAINTENANCES
+                    def api_token
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
 
                     //JSON BODY MAINTENANCE DETAILS
