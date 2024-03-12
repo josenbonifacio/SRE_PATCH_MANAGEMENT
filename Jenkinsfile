@@ -422,13 +422,12 @@ pipeline {
       }
     }
 
- stages {
         stage('Example') {
             steps {
                 echo "Selected Country: ${params.OPTION}"
             }
         }
-    }
+
 
     
   }
