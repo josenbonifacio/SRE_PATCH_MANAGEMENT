@@ -411,12 +411,16 @@ pipeline {
                 ]
                 ]
               ],
-               extendedChoice(name: 'ENVIRONMENT', description: 'Select the environment', defaultValue: 'Production', multiSelectDelimiter: ',', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_SINGLE_SELECT', value: 'Production', visibleItemCount: 5, groovyScript: [
-            classpath: [],
-            script: '''
-            return ['Development', 'Staging', 'Production']
-            '''
-        ])
+              [$class: 'ExtendedChoiceParameter',
+                type: 'PT_SINGLE_SELECT',
+                name: 'OPERATION',
+                value: 'CREATE,UPDATE',
+                defaultValue: 'CREATE',
+                multiSelectDelimiter: ',',
+                quoteValue: false,
+                visibleItemCount: 3
+                ]
+              ]
             ])
           ])
 
