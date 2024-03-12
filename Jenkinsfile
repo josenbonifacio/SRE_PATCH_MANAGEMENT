@@ -410,25 +410,7 @@ pipeline {
                     '''
                 ]
                 ]
-              ],
-              extendedChoice(
-                name: 'OPERATION', 
-                //description: 'Select the environment', 
-                defaultValue: 'CREATE', 
-                multiSelectDelimiter: ',', 
-                quoteValue: false, 
-                saveJSONParameterToFile: false, 
-                type: 'PT_SINGLE_SELECT', 
-                //value: 'Production', 
-                visibleItemCount: 2, 
-                groovyScript: [
-                classpath: [],
-                script: 
-                '''
-                return ['CREATE', 'UPDATE']
-                '''
-                ]
-              ),    
+              ]    
             ])
           ])
 
