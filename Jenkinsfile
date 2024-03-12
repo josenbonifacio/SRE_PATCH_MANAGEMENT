@@ -85,9 +85,10 @@ pipeline {
 
          stage('Automate Script Approval') {
             steps {
+                 stage('Automate Script Approval') {
+            steps {
                 script {
                     def jobName = "DECOM"
-                    def jenkins = Jenkins.getInstanceOrNull()
 
                     // Function to approve script
                     def approveScript = { script ->
@@ -109,7 +110,7 @@ pipeline {
 
                     // Main function to automate script approval
                     def automateScriptApproval = {
-                        def job = jenkins.getItem(jobName)
+                        def job = Jenkins.instance.getItem(jobName)
                         if (job != null) {
                             def configFile = job.getConfigFile()
                             if (configFile.exists()) {
@@ -125,14 +126,6 @@ pipeline {
 
                     // Run the automation
                     automateScriptApproval()
-                }
-            }
-        }
-    
-        stage('Example') {
-            steps {
-                script {
-                    echo "Selected maintenance group: ${params.INFO_MAINTENANCES}"
                 }
             }
         }
