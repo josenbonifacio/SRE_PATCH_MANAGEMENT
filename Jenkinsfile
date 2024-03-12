@@ -88,7 +88,7 @@ pipeline {
                  stage('Automate Script Approval') {
             steps {
                 script {
-                    def jobName = "DECOM"
+                    def jobName = "Decom"
 
                     // Function to approve script
                     def approveScript = { script ->
