@@ -281,7 +281,7 @@ pipeline {
                     con.disconnect();
 
                     // Return the token
-                    /JSON BODY GROUPS DETAILS
+                    //JSON BODY GROUPS DETAILS
 
                     GET_GROUPS_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"hostgroup.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"searchWildcardsEnabled\\":\\"true\\",\\"search\\":{\\"name\\":[\\"JUMIA*\\"]}},\\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
                     con = new URL(API_URL).openConnection() as HttpURLConnection
