@@ -111,12 +111,10 @@ pipeline {
                     classpath: [],
                     sandbox: false,
                     script: '''
-                    import groovy.json.JsonSlurper
-                    import java.net.HttpURLConnection
-                    import java.net.URL
-                    import java.io.OutputStream
-                    import java.util.Date
 
+                    import groovy.json.JsonSlurper;
+                    import java.util.concurrent.TimeUnit
+                    
                     def api_token
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
 
