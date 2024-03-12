@@ -89,7 +89,9 @@ pipeline {
                     classpath: [],
                     script: 'return ["Error: Script Not Available"]'
                 ],
-                script: '''
+                script: [
+                    classpath: [],
+                    script: '''
                     import groovy.json.JsonSlurper
                     import java.net.HttpURLConnection
                     import java.net.URL
