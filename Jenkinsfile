@@ -3,7 +3,6 @@ pipeline {
 
     parameters {
         activeChoice(
-            defaultValue: '1',
             description: 'Select the maintenance group',
             name: 'INFO_MAINTENANCES',
             script: [
@@ -59,7 +58,7 @@ pipeline {
         reactiveChoice(
             name: 'INFO_MAINTENANCES_DETAILS',
             description: 'Select maintenance details',
-            referencedParameter: 'INFO_MAINTENANCES',
+            referencedParameterss: 'INFO_MAINTENANCES',
             choiceType: 'BULLETED_ITEMS',
             script: [
                 $class: 'GroovyScript',
@@ -136,7 +135,7 @@ pipeline {
         reactiveChoice(
             name: 'GROUP_DETAILS',
             description: 'Select group details',
-            referencedParameter: 'INFO_Groups',
+            referencedParameterss: 'INFO_Groups',
             choiceType: 'BULLETED_ITEMS',
             script: [
                 $class: 'GroovyScript',
@@ -244,7 +243,7 @@ pipeline {
         activeChoiceHtml(
             name: 'OPTIONS',
             description: 'Select options',
-            referencedParameter: 'OPERATION',
+            referencedParameterss: 'OPERATION',
             choiceType: 'FORMATTED_HTML',
             script: [
                 $class: 'GroovyScript',
@@ -373,7 +372,7 @@ pipeline {
         reactiveChoice(
             name: 'GROUP_PICK',
             description: 'Select group',
-            referencedParameter: 'OPERATION',
+            referencedParameterss: 'OPERATION',
             choiceType: 'SINGLE_SELECT',
             script: [
                 $class: 'GroovyScript',
@@ -452,7 +451,7 @@ pipeline {
         reactiveChoice(
             name: 'DETAILS_MAINTENANCE',
             description: 'Select maintenance details',
-            referencedParameter: 'OPERATION',
+            referencedParameterss: 'OPERATION',
             choiceType: 'FORMATTED_HTML',
             script: [
                 $class: 'GroovyScript',
