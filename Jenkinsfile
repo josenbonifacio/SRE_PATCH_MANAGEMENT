@@ -24,8 +24,7 @@ pipeline {
                   script: [
                     classpath: [],
                     sandbox: false,
-                    script: ''
-                    '
+                    script: '''
                     package maintenance_list
 
                     import groovy.json.JsonSlurper
@@ -122,9 +121,7 @@ pipeline {
 
                     con.disconnect();
 
-                    ''
-                    '
-
+                    '''
                   ]
                 ]
               ]
