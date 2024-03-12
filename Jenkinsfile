@@ -410,7 +410,11 @@ pipeline {
                     '''
                 ]
                 ]
-              ]
+              ],
+              choice(
+                                choices: ['CREATE', 'UPDATE'], 
+                                name: 'OPERATION'
+              ),
             ])
           ])
 
