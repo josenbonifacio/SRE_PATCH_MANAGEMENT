@@ -70,7 +70,7 @@ pipeline {
                         groupslistfinal.eachWithIndex{ it, i -> println "$i : $it" }
                         return groupslistfinal.sort()
                     } else {
-                        println("HTTP response error")
+                        println(" HTTP response error")
                         System.exit(0)
                     }
                     
