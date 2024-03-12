@@ -1,0 +1,7 @@
+- hosts: zabbix
+  roles:
+    - role: get_token
+    - role: create_maintenance
+      when: OPERATION == 'CREATE'
+    - role: delete_maintenance
+      when: OPERATION == 'DELETE'

@@ -1,0 +1,40 @@
+
+hosts: primary_sql_servers, secondary_sql_servers
+tasks:
+  - name: Perform Hyper-V backup
+    win_shell: "Invoke-Command -ComputerName {{ item.vm_name }} -ScriptBlock {Start-VMSnapshot -VMName '{{ item.vm_name }}' -SnapshotName 'backup_snapshot'}"
+    loop: "{{ sql_servers }}" ## back up de todas
+  - name: Migrate roles to secondary server
+    win_shell: "" ## powershell command to do this
+    loop: "{{ sql_servers }}"
+    when: inventory_hostname in groups['secondary_sql_servers']
+  - name: Stop MSSQL database service
+    win_service:
+      name: dbjumia
+      state: stopped
+    loop: "{{ sql_servers }}"
+  - name: Install all available updates
+    win_updates:
+    category_names:
+      - SecurityUpdates
+      - CriticalUpdates
+      - UpdateRollups
+    state: installed
+    loop: "{{ sql_servers }}"
+  - name: Reboot servers
+    win_reboot:
+      loop: "{{ sql_servers }}"
+  - name: Wait for servers to come back online
+    wait_for_connection:
+      delay: 30 ##seconds
+      timeout: 600 ## secondes
+      loop: "{{ sql_servers }}"
+  - name: Migrate roles back to primary server
+    win_shell: "" ##powershell command to do this
+    loop: "{{ sql_servers }}"
+    when: inventory_hostname in groups['primary_sql_servers']
+
+    ##do the same for the second
+    ##SANITY CHECKS
+    ##ERROR HANDLING
+    ##TIMEOUT PLAYBOOK????

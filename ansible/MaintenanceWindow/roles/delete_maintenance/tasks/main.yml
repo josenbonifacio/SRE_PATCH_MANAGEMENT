@@ -1,0 +1,51 @@
+---
+
+- name: Split GROUP_PICK
+  set_fact:
+    maintenance_names: "{{ options.split(',') | map('trim') | reject('eq', '') | list }}"
+
+- name: Debug variables
+  debug:
+    msg: "{{ maintenance_names }}"
+
+
+- name: Get Maintenance Id for each maintenance name
+  uri:
+    url: "{{ api_url }}"
+    method: GET
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "maintenance.get"
+      params:
+        output: "maintenanceid"
+        search:
+          name: "{{ item }}"
+      auth: "{{ response_token }}"
+      id: 1
+  loop: "{{ maintenance_names }}"
+  register: response_maintenance_id
+
+- name: Debug variables
+  debug:
+    msg: "{{ response_maintenance_id.results }}"
+
+
+
+- name: Create Maintenance Delete Task for each maintenance name
+  uri:
+    url: "{{ api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "maintenance.delete"
+      params: "{{ response_maintenance_id.results | json_query('[].json.result[0].maintenanceid') }}"
+      auth: "{{ response_token }}"
+      id: 1
+  register: response_maintenance_delete_task
+
+
+- name: Debug list
+  debug:
+    msg: "{{ response_maintenance_delete_task }}"

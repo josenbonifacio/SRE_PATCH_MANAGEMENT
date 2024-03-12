@@ -1,0 +1,50 @@
+---
+
+
+- name: Get Token
+  uri:
+    url: "{{ api_url }}"
+    method: GET
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "user.login"
+      params:
+        user: "{{ zabbix_username }}"
+        password: "{{ zabbix_password }}"
+      id: 1
+      auth: null
+    return_content: true
+  delegate_to: localhost
+  delegate_facts: true
+  register: response_token
+
+- name: Debug Get token
+  debug:
+    msg: "{{ response_token }}"
+
+- set_fact:
+    response_token: "{{ response_token.json.result }}"
+
+- name: Debug Get token
+  debug:
+    msg: "{{ response_token }}"
+
+- name: Get List
+  uri:
+    url: "{{ api_url }}"
+    method: GET
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "host.get"
+      params:
+        output: ["host", "hostid"]
+      id: 1
+      auth: "{{ response_token }}"
+    return_content: true
+  register: response_getlist
+
+- name: Debug Get list
+  debug:
+    msg: "{{ response_getlist.json.result }}"

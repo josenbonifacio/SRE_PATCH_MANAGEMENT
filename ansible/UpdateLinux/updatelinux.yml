@@ -1,0 +1,12 @@
+
+hosts: linuxdebian,linuxcentos
+tasks:
+  - name: Upgrade all apt packages
+    apt: state=latest force_apt_get=yes
+    when: inventory_hostname in groups['linuxdebian']
+
+  - name: Upgrade all packages, excluding kernel
+    ansible.builtin.yum:
+      name: '*'
+      state: latest
+      exclude: kernel*,foo*

@@ -1,0 +1,89 @@
+---
+
+- name: Split OPERATION
+  set_fact:
+    maintenance_detail: "{{ options.split(',')[0] }}"
+    active_since: "{{ ((options.split(',')[1]  | replace('T', ' ') + ':00') | to_datetime).timestamp() | replace('.0', '') }}"
+    active_till: "{{ ((options.split(',')[2]  | replace('T', ' ') + ':00') | to_datetime).timestamp() | replace('.0', '') }}"
+
+
+- name: Split GROUP_PICK
+  set_fact:
+    group_name: "{{ group_pick.split(',')[0] }}"
+
+
+- name: Split DETAILS_MAINTENANCE
+  set_fact:
+    period: "{{ (details_maintenance.split(',')[0] + 'h') | community.general.to_time_unit('seconds') | replace('.0', '') }}"
+    month_day: "{{ details_maintenance.split(',')[1] }}"
+    start_hour: "{{ (details_maintenance.split(',')[2] | replace(':', 'h ') + 's') | community.general.to_time_unit('seconds') | replace('.0', '') }}"
+
+
+- name: Debug variables
+  debug:
+    var: item
+  loop:
+    - "{{ maintenance_detail }}"
+    - "{{ active_since }}"
+    - "{{ active_till }}"
+    - "{{ group_name }}"
+    - "{{ period }}"
+    - "{{ month_day }}"
+    - "{{ start_hour }}"
+
+- name: Get Group Id
+  uri:
+    url: "{{ api_url }}"
+    method: GET
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "hostgroup.get"
+      params:
+        output: "groupid"
+        search:
+          name: ["{{ group_name }}"]
+      auth: "{{ response_token }}"
+      id: 1
+    return_content: true
+  register: response_group_name
+
+- name: Debug variables
+  debug:
+    msg: "{{ response_group_name }}"
+
+
+- name: Debug variables
+  debug:
+    msg: "{{ response_group_name.json.result[0].groupid }}"
+
+
+- name: Create Maintenance Task
+  uri:
+    url: "{{ api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "maintenance.create"
+      params:
+        name: 'Patch Update "{{ maintenance_detail }}"'
+        active_since: "{{ active_since }}"
+        active_till: "{{ active_till }}"
+        tags_evaltype: 0
+        groupids:
+          - "{{ response_group_name.json.result[0].groupid }}"
+        timeperiods:
+          - period: "{{ period }}"
+            timeperiod_type: 4
+            start_time: "{{ start_hour }}"
+            day:  "{{ month_day }}"
+      auth: "{{ response_token }}"
+      id: 1
+  register: response_maintenance_task
+
+
+- name: Debug list
+  debug:
+    msg: "{{ response_maintenance_task }}"
+
