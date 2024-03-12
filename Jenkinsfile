@@ -23,7 +23,7 @@ def api_token
 API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
 
 //JSONS BODY TOKEN
-GET_TOKEN_PARAMS="{\\"jsonrpc\\":\\"2.0\",\\"method\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+GET_TOKEN_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
 
 
 //CONNECTION & GLOBAL PARAMETERS
