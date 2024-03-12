@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        activeChoiceParam(
+        activeChoice(
             defaultValue: '1',
             description: 'Select the maintenance group',
             name: 'INFO_MAINTENANCES',
@@ -56,7 +56,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactiveReference(
+        reactiveChoice(
             name: 'INFO_MAINTENANCES_DETAILS',
             description: 'Select maintenance details',
             referencedParameter: 'INFO_MAINTENANCES',
@@ -133,7 +133,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactiveReference(
+        reactiveChoice(
             name: 'GROUP_DETAILS',
             description: 'Select group details',
             referencedParameter: 'INFO_Groups',
@@ -225,7 +225,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactive(
+        reactiveChoice(
             name: 'OPERATION',
             description: 'Select operation',
             choiceType: 'SINGLE_SELECT',
@@ -241,7 +241,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactiveReference(
+        activeChoiceHtml(
             name: 'OPTIONS',
             description: 'Select options',
             referencedParameter: 'OPERATION',
@@ -370,7 +370,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactiveReference(
+        reactiveChoice(
             name: 'GROUP_PICK',
             description: 'Select group',
             referencedParameter: 'OPERATION',
@@ -449,7 +449,7 @@ pipeline {
             ]
         )
 
-        activeChoiceReactiveReference(
+        reactiveChoice(
             name: 'DETAILS_MAINTENANCE',
             description: 'Select maintenance details',
             referencedParameter: 'OPERATION',
