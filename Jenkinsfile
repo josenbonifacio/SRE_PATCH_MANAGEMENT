@@ -78,7 +78,7 @@ pipeline {
                 ]
             ]
         )
-        activeChoiceReactiveReference(
+        reactiveChoice(
             name: 'INFO_MAINTENANCES_DETAILS',
             description: 'Select maintenance details',
             referencedParameter: 'INFO_MAINTENANCES',
