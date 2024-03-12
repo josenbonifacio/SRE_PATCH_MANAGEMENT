@@ -38,17 +38,17 @@ pipeline {
 
                     //JSONS BODY TOKEN
                     GET_TOKEN_PARAMS = "{\\"
-                    jsonrpc\\ ":\\"
-                    2.0\\ ",\\"
-                    method\\ ":\\"
-                    user.login\\ ",\\"
-                    params\\ ":{\\"
-                    user\\ ":\\"
-                    Admin\\ ",\\"
-                    password\\ ":\\"
-                    zabbix\\ "},\\"
-                    id\\ ":1,\\"
-                    auth\\ ":null}";
+                    jsonrpc\\":\\"
+                    2.0\\",\\"
+                    method\\":\\"
+                    user.login\\",\\"
+                    params\\":{\\"
+                    user\\":\\"
+                    Admin\\",\\"
+                    password\\":\\"
+                    zabbix\\"},\\"
+                    id\\":1,\\"
+                    auth\\":null}";
 
                     //CONNECTION & GLOBAL PARAMETERS
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -71,25 +71,7 @@ pipeline {
 
                     // Return the token
                     //JSONS BODY MAINTENANCE LIST
-                    GET_MAINTENANCE_LIST = "{\\"
-                    jsonrpc\\ ":\\"
-                    2.0\\ ",\\"
-                    method\\ ":\\"
-                    maintenance.get\\ ",\\"
-                    params\\ ":{\\"
-                    output\\ ":\\"
-                    extend\\ ",\\"
-                    selectGroups\\ ":\\"
-                    extend\\ ",\\"
-                    selectTimeperiods\\ ":\\"
-                    extend\\ ",\\"
-                    selectTags\\ ":\\"
-                    extend\\ "},\\"
-                    auth\\ ":" + "\\"
-                    " + api_token.result + "\\
-                    "" + ",\\"
-                    id\\ ":\\"
-                    1\\ "}"
+                    GET_MAINTENANCE_LIST = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"maintenance.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"selectGroups\\":\\"extend\\",\\"selectTimeperiods\\":\\"extend\\",\\"selectTags\\":\\"extend\\"},\\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
 
                     //REQUEST MAINTENANCE PARAMETERS
                     con = new URL(API_URL).openConnection() as HttpURLConnection
