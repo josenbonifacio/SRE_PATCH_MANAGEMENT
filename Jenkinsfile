@@ -108,7 +108,7 @@ pipeline {
 
                     // Main function to automate script approval
                     def automateScriptApproval = {
-                        def job = Jenkins.instance.getItem(jobName)
+                        def job = currentBuild.rawBuild.getParent().getJob(jobName)
                         if (job != null) {
                             def configFile = job.getConfigFile()
                             if (configFile.exists()) {
