@@ -523,6 +523,8 @@ pipeline {
                     
                     
                     def html = """
+                    <label style="font-weight: 500;">Maintenance Name</label>
+                    <br>
                     
                     <select id="mySelect" class="setting-input" name="value" multiple>
                     """
