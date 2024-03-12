@@ -156,10 +156,4 @@ pipeline {
         )
 
     }
-
-    stages {
-
-      
-        
-    }
 }
