@@ -81,7 +81,7 @@ pipeline {
         reactiveChoice(
             name: 'INFO_MAINTENANCES_DETAILS',
             description: 'Select maintenance details',
-            referencedParameter: 'INFO_MAINTENANCES',
+            referencedParameters: 'INFO_MAINTENANCES',
             choiceType: 'BULLETED_ITEMS',
             script: [
                 $class: 'GroovyScript',
