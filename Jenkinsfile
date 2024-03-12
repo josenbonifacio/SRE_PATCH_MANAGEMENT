@@ -156,4 +156,22 @@ pipeline {
         )
 
     }
+    stages {
+
+
+        stage('Example') {
+            steps {
+                script {
+                    echo "Selected maintenance group: ${params.INFO_MAINTENANCES}"
+                    echo "Selected maintenance details: ${params.INFO_MAINTENANCES_DETAILS}"
+                   /* echo "Selected group: ${params.INFO_Groups}"
+                    echo "Selected group details: ${params.GROUP_DETAILS}"
+                    echo "Selected operation: ${params.OPERATION}"
+                    echo "Selected options: ${params.OPTIONS}"
+                    echo "Selected group pick: ${params.GROUP_PICK}"
+                    echo "Selected maintenance details: ${params.DETAILS_MAINTENANCE}"*/
+                }
+            }
+        }
+    }
 }
