@@ -1,6 +1,11 @@
 pipeline {
   agent any
 
+   environment {
+            zabbixu = credentials('zabbix_user')
+            zabbixp = credentials('zabbix_pass')
+        }
+  
   stages {
     stage('Parameters') {
       steps {
@@ -716,6 +721,30 @@ pipeline {
                 echo "Selected Country: ${params.OPERATION}"
             }
         }
+    stage('Git Checkout'){
+            steps{
+                checkout scm
+            }
+         
+        }
+
+        stage('Execute Ansible'){
+            steps{
+                ansiColor('xterm') {
+                    ansiblePlaybook(
+                        playbook: 'ansible/MaintenanceWindow/site.yml',
+                        colorized: true,
+                        inventory: 'ansible/MaintenanceWindow/inventories/production',
+                        //extras: '-e tipo=${Environment} -e zabbix_username=$zabbixu -e zabbix_password=$zabbixp -e tipo2=${Groups}')
+                        //extras: "-e 'tipo=${Environment}' -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'tipo2=\"${Groups}\"'")
+                        //extras: "-e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'Environment=\"${Groups}\"' -e 'active_since=\"${active_since}\"' -e 'active_till=\"${active_till}\"' -e 'groupid=\"${groupid}\"' -e 'period=\"${period}\"' -e 'start_hour=\"${start_hour}\"' -e 'month_day=\"${month_day}\"'")
+                        //extras: "-e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${parameterHTML}\"'")
+                          extras: "-e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'")
+
+
+
+                }
+            }    
 
 
     
