@@ -13,7 +13,6 @@ pipeline {
                 ],
                 script: [
                     classpath: [],
-                    sandbox: true,
                     script: '''
                         
                     import groovy.json.JsonSlurper
