@@ -525,7 +525,7 @@ pipeline {
                     def html = """
                     
                     <select id="mySelect" class="setting-input" name="value" multiple>
-                    '''
+                    """
                     
                     groupslistfinal.each { option ->
                         html += "<option value='${option}'>${option}</option>"
