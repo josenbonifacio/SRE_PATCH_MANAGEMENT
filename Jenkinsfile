@@ -415,7 +415,134 @@ pipeline {
                 choices: ['CREATE','UPDATE'],
                 name: 'OPTION'
 
-                )
+              ),
+              [$class: 'DynamicReferenceParameter', 
+                choiceType: 'ET_FORMATTED_HTML', 
+                description: 'Details of Maintenance', 
+                name: 'OPTIONS', 
+                referencedParameters: 'OPERATION', 
+                script: [
+                  $class: 'GroovyScript',
+                  fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script:
+                    'return ["Error"]'
+                  ],
+                  script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+
+                    import groovy.json.JsonSlurper
+
+
+                    def date = new Date()
+                    
+                    if ( OPERATION == "CREATE") {
+                    
+                    MaintenanceHtml = """
+                    
+                    
+                    <ul style="list-style-type:none;padding: 0;margin:0">
+                    <label style="font-weight: 500;">Maintenance Name</label>
+                    <input type="text" class="setting-input" name="value">
+                    <label for="end">Start date:</label>
+                    <input type="datetime-local" id="1" class="setting-input" name="value" value=date.format('yyyy-mm-ddTHH:mm', TimeZone.getTimeZone('UTG')) min=date.format('yyyy-mm-ddTHH:mm', TimeZone.getTimeZone('UTG'))/>
+                    <label for="end">End date:</label>
+                    <input type="datetime-local" id="2" class="setting-input" name="value" value=date.format('yyyy-mm-ddTHH:mm', TimeZone.getTimeZone('UTG')) min=date.format('yyyy-mm-ddTHH:mm', TimeZone.getTimeZone('UTG'))/>
+                    <br>
+                      </li>
+                    </ul>
+                    """
+                    return MaintenanceHtml
+                    }
+                    
+                    
+                    
+                    if (OPERATION == "DELETE")
+                    {
+                    
+                    //VARIABLES
+                    def api_token
+                    API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
+                    
+                    //JSONS BODY TOKEN
+                    GET_TOKEN_PARAMS="{\"jsonrpc\":\"2.0\",\"method\":\"user.login\",\"params\":{\"user\":\"Admin\",\"password\":\"zabbix\"},\"id\":1,\"auth\":null}";
+                    
+                    //CONNECTION & GLOBAL PARAMETERS
+                    def con = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    
+                    //REQUEST TOKEN PARAMETERS
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("Content-Type", "application/json-rpc");
+                    con.setDoOutput(true);
+                    OutputStream os = con.getOutputStream();
+                    os.write(GET_TOKEN_PARAMS.getBytes());
+                    os.flush();
+                    os.close();
+                    
+                    
+                    if (con.getResponseCode() == 200) { // success
+                        api_token = new JsonSlurper().parseText(con.getInputStream().getText('UTF-8'))
+                    } else {
+                        System.out.println("GET request did not work.");
+                    }
+                    con.disconnect();
+                    
+                    //JSONS BODY MAINTENANCE LIST
+                    GET_MAINTENANCE_LIST="{\"jsonrpc\":\"2.0\",\"method\":\"maintenance.get\",\"params\":{\"output\":\"extend\",\"selectGroups\":\"extend\",\"selectTimeperiods\":\"extend\",\"selectTags\":\"extend\"},\"auth\":" + "\"" + api_token.result + "\"" + ",\"id\":\"1\"}"
+                    
+                    //REQUEST MAINTENANCE PARAMETERS
+                    con = new URL(API_URL).openConnection() as HttpURLConnection
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("Content-Type", "application/json-rpc");
+                    con.setDoOutput(true);
+                    os = con.getOutputStream();
+                    os.write(GET_MAINTENANCE_LIST.getBytes());
+                    os.flush();
+                    os.close();
+                    
+                    
+                    //PARSE REQUEST
+                    def groupslistfinal = []
+                    if (con.getResponseCode() == 200) {
+                        groupslist = new JsonSlurper().parseText(con.getInputStream().getText('UTF-8'))
+                            groupslist.result.each { result ->
+                        groupslistfinal.add(result.name) }
+                        groupslistfinal.eachWithIndex{ it, i -> println "$i : $it" }
+                    } else {
+                        println("HTTP response error")
+                        System.exit(0)
+                    }
+                    
+                    con.disconnect();
+                    
+                    
+                    
+                    
+                    def html = """
+                    
+                    <select id="mySelect" class="setting-input" name="value" multiple>
+                    '''
+                    
+                    groupslistfinal.each { option ->
+                        html += "<option value='${option}'>${option}</option>"
+                    }
+                    
+                    html += """
+                    </select>
+                    """
+                    
+                    return html
+                    
+                    }
+
+                    '''
+                  ]
+                ]
+              ]
             ])
           ])
         }
