@@ -310,6 +310,106 @@ pipeline {
                     '''
                   ]
                 ]
+              ],
+              [$class: 'DynamicReferenceParameter', 
+                choiceType: 'ET_UNORDERED_LIST', 
+                description: 'Details of Group', 
+                name: 'INFO_GROUPS_DETAILS', 
+                referencedParameters: 'INFO_GROUPS', 
+                script: [
+                  $class: 'GroovyScript',
+                  fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script:
+                    'return ["Error"]'
+                  ],
+                  script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+                
+                    import groovy.json.JsonSlurper
+
+                    def api_token
+                    API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    
+                    
+                    def con = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    /// GET TOKEN
+                    
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("Content-Type", "application/json-rpc");
+                    con.setDoOutput(true);
+                    OutputStream os = con.getOutputStream();
+                    os.write(GET_TOKEN_PARAMS.getBytes());
+                    os.flush();
+                    os.close();
+                    
+                    if (con.getResponseCode() == 200) { // success
+                        api_token = new JsonSlurper().parseText(con.getInputStream().getText('UTF-8'))
+                    } else {
+                        System.out.println("GET request did not work.");
+                    }
+                    con.disconnect()
+                    
+                    def con2 = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    
+                    def group_id
+                    GET_GROUPS_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"hostgroup.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"searchWildcardsEnabled\\":\\"true\\",\\"search\\":{\\"name\\":[\\"JUMIA*\\"]}},\\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
+                    con2.setRequestMethod("GET");
+                    con2.setRequestProperty("Content-Type", "application/json-rpc");
+                    con2.setDoOutput(true);
+                    OutputStream os2 = con2.getOutputStream();
+                    os2.write(GET_GROUPS_PARAMS.getBytes());
+                    os2.flush();
+                    os2.close()
+                    
+                    
+                    def groupslistfinal = []
+                    if (con2.getResponseCode() == 200) {
+                        groupslist = new JsonSlurper().parseText(con2.getInputStream().getText('UTF-8'))
+                        groupslist.result.each { result ->
+                            if(result.name.equals(INFO_GROUPS))
+                               group_id=result.groupid}
+                        con2.disconnect();
+                    } else {
+                        con2.disconnect();
+                        println("HTTP response error")
+                        System.exit()
+                    }
+                    con2.disconnect();
+                    
+                    def con3 = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    GET_HOSTS_GROUP="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"host.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"groupids\\":[\\"" + group_id + "\\"]},\\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
+                    con3.setRequestMethod("GET");
+                    con3.setRequestProperty("Content-Type", "application/json-rpc");
+                    con3.setDoOutput(true);
+                    OutputStream os3 = con3.getOutputStream();
+                    os3.write(GET_HOSTS_GROUP.getBytes());
+                    os3.flush();
+                    os3.close()
+                    
+                    
+                    def groupslistfinal2 = []
+                    if (con3.getResponseCode() == 200) {
+                        groupslist = new JsonSlurper().parseText(con3.getInputStream().getText('UTF-8'))
+                        groupslist.result.each { result -> groupslistfinal2.add(result.host)  }
+                        groupslistfinal2.eachWithIndex{ it, i -> println "$i : $it" }
+                        return groupslistfinal2.sort()
+                    
+                    } else {
+                        println("HTTP response error")
+                        System.exit(0)
+                    }
+                
+                    '''
+                ]
+                ]
               ]
             ])
           ])
