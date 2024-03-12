@@ -544,6 +544,166 @@ pipeline {
                     '''
                   ]
                 ]
+              ],
+              [$class: 'CascadeChoiceParameter', 
+                choiceType: 'PT_SINGLE_SELECT', 
+                description: 'Select the group',
+                name: 'GROUP_PICK', 
+                referencedParameters: 'OPERATION', 
+                script: 
+                  [$class: 'GroovyScript', 
+                  fallbackScript: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: "return['Could not get Environment from Env Param']"
+                    ], 
+                  script: [
+                    classpath: [], 
+                    sandbox: false, 
+                    script: '''
+                    import groovy.json.JsonSlurper
+
+                    if(OPERATION == "CREATE" )
+                    {
+                    
+                    def api_token
+                    API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
+                    GET_TOKEN_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    def con = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("Content-Type", "application/json-rpc");
+                    con.setDoOutput(true);
+                    OutputStream os = con.getOutputStream();
+                    os.write(GET_TOKEN_PARAMS.getBytes());
+                    os.flush();
+                    os.close();
+                    
+                    if (con.getResponseCode() == 200) { // success
+                        api_token = new JsonSlurper().parseText(con.getInputStream().getText('UTF-8'))
+                    } else {
+                        System.out.println("GET request did not work.");
+                    }
+                    con.disconnect()
+                    
+                    def con2 = new URL(API_URL).openConnection() as HttpURLConnection
+                    
+                    GET_GROUPS_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"hostgroup.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"searchWildcardsEnabled\\":\\"true\\",\\"search\\":{\\"name\\":[\\"JUMIA*\\"]}},\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
+                    con2.setRequestMethod("GET");
+                    con2.setRequestProperty("Content-Type", "application/json-rpc");
+                    con2.setDoOutput(true);
+                    OutputStream os2 = con2.getOutputStream();
+                    os2.write(GET_GROUPS_PARAMS.getBytes());
+                    os2.flush();
+                    os2.close()
+                    
+                    def groupslistfinal = []
+                    if (con.getResponseCode() == 200) {
+                        groupslist = new JsonSlurper().parseText(con2.getInputStream().getText('UTF-8'))
+                        groupslist.result.each { result ->
+                        groupslistfinal.add(result.name) }
+                        groupslistfinal.eachWithIndex{ it, i -> println "$i : $it" }
+                        return groupslistfinal.sort()
+                    } else {
+                        println("HTTP response error")
+                        System.exit(0)
+                    }
+                    }
+                    if(OPERATION == "DELETE" )
+                    {
+                    
+                    return ['NA']
+                    
+                    }
+                    
+                    if(OPERATION == "UPDATE" )
+                    {
+                    
+                    return ['NA']
+                    
+                    }
+
+                      '''
+                  ] 
+                ]
+              ],
+              [$class: 'DynamicReferenceParameter', 
+                choiceType: 'ET_FORMATTED_HTML', 
+                description: 'Details of Maintenance', 
+                name: 'DETAILS_MAINTENANCE', 
+                referencedParameters: 'OPERATION', 
+                script: [
+                  $class: 'GroovyScript',
+                  fallbackScript: [
+                    classpath: [],
+                    sandbox: false,
+                    script:
+                    'return ["Error"]'
+                  ],
+                  script: [
+                    classpath: [],
+                    sandbox: false,
+                    script: '''
+
+                    
+                    if (OPERATION == "CREATE") {
+                        String html = """
+                        <label for="period">Number of hours</label>
+                        <input type="number" class="setting-input" id="period" name="value" min="1" max="10" />
+                        <br>
+                        <label style="font-weight: 500;">Every month at day:</label>
+                        <select class="setting-input" id="day" name="value">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        </select>
+                        <br>
+                        <label style="font-weight: 500;">At time:</label>
+                        <input type="time" class="setting-input" name="value">
+                        <br>
+                        """
+                    
+                            return html
+                        }
+                    
+                    if(OPERATION == "DELETE" )
+                    {
+                    
+                    return ['NA']
+                    
+                    }
+
+                    '''
+                  ]
+                ]
               ]
             ])
           ])
