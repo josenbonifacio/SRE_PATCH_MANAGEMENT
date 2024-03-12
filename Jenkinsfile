@@ -462,7 +462,7 @@ pipeline {
                 ],
                 script: '''
                     if (OPERATION == "CREATE") {
-                        String html = '''
+                        String html = """
                         <label for="period">Number of hours</label>
                         <input type="number" class="setting-input" id="period" name="value" min="1" max="10" />
                         <br>
@@ -504,7 +504,7 @@ pipeline {
                         <label style="font-weight: 500;">At time:</label>
                         <input type="time" class="setting-input" name="value">
                         <br>
-                        '''
+                        """
 
                             return html
                         }
