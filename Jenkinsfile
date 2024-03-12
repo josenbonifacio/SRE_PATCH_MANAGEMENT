@@ -155,7 +155,8 @@ pipeline {
                     }
                 '''
             ]
-        )
+        ]
+    )
 
     }
     stages {
