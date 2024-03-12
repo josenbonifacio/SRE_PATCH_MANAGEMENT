@@ -95,7 +95,7 @@ pipeline {
                 ]
               ],
               [$class: 'DynamicReferenceParameter', 
-                choiceType: 'ET_ORDERED_LIST', 
+                choiceType: 'ET_UNORDERED_LIST', 
                 description: 'Details of Maintenance', 
                 name: 'INFO_Maintenance_Details', 
                 referencedParameters: 'INFO_Maintenances', 
