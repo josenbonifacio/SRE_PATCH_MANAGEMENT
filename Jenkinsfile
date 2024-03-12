@@ -121,7 +121,7 @@ pipeline {
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
 
                     //JSON BODY MAINTENANCE DETAILS
-                    GET_MAINTENANCE_DETAILS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"maintenance.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"selectGroups\\":\\"extend\\",\\"selectTimeperiods\\":\\"extend\\",\\"selectTags\\":\\"extend\\"},\\"auth\\":" + "\"" + api_token.result + "\"" + ",\\"id\\":\\"1\\"}"
+                    GET_MAINTENANCE_DETAILS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"maintenance.get\\",\\"params\\":{\\"output\\":\\"extend\\",\\"selectGroups\\":\\"extend\\",\\"selectTimeperiods\\":\\"extend\\",\\"selectTags\\":\\"extend\\"},\\"auth\\":" + "\\"" + api_token.result + "\\"" + ",\\"id\\":\\"1\\"}"
                     con = new URL(API_URL).openConnection() as HttpURLConnection
                     con.setRequestMethod("GET");
                     con.setRequestProperty("Content-Type", "application/json-rpc");
@@ -203,6 +203,7 @@ pipeline {
                                 break;
                             default:
                                 return " "
+                        }
                         }
 
                     '''
