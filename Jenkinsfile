@@ -19,7 +19,7 @@ pipeline {
                                            classpath: [],
                                            sandbox: false,
                                            script:
-                                               "return ["Error: Script Not Available"]"
+                                               'return ["Error: Script Not Available"]'
                                        ],
                                        script: [
                                            classpath: [],
