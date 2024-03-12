@@ -416,11 +416,8 @@ pipeline {
                 name: 'OPTION'
 
                 )
-              ]
-              ]
             ])
           ])
-
         }
       }
     }
