@@ -172,6 +172,38 @@ pipeline {
                         duration=convertPeriod(period[0].period)
                         return "Duration - " + duration + "h";
                     }
+                    def convertSeconds(secondsToConvert){
+                        long millis = secondsToConvert.toInteger() * 1000;
+                        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+                        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1);
+                        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1);
+                        String format = String.format("%02d:%02d:%02d", Math.abs(hours), Math.abs(minutes), Math.abs(seconds));
+                        return format
+                    }
+                    
+                    def convertPeriod(secondsToConvert){
+                        long hours = secondsToConvert.toInteger() / 3600;
+                        return hours
+                    
+                    }
+                    def convertType(typetoConvert){
+                    
+                        switch(typetoConvert) {
+                            case "0":
+                                return "One time only"
+                                break;
+                            case "2":
+                                return "Daily"
+                                break;
+                            case "3":
+                                return "Weekly"
+                                break;
+                            case "4":
+                                return "Monthly"
+                                break;
+                            default:
+                                return " "
+                        }
 
                     '''
                   ]
