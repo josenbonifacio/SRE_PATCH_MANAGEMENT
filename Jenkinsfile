@@ -411,15 +411,11 @@ pipeline {
                 ]
                 ]
               ],
-              [$class: 'ExtendedChoiceParameter',                     
-                type: 'PT_SINGLE_SELECT',
-                name: 'OPERATION',
-                value: 'CREATE,UPDATE',
-                defaultValue: 'CREATE',
-                multiSelectDelimiter: ',',
-                quoteValue: false,
-                visibleItemCount: 3
-                ]
+              choice(
+                choices: ['CREATE','UPDATE'],
+                name: 'OPTION'
+
+                )
               ]
             ])
           ])
