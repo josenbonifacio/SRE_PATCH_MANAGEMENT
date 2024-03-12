@@ -411,7 +411,7 @@ pipeline {
                 ]
                 ]
               ],
-              extendedChoice(                
+              [$class: 'ExtendedChoiceParameter',                     
                 type: 'PT_SINGLE_SELECT',
                 name: 'OPERATION',
                 value: 'CREATE,UPDATE',
@@ -419,7 +419,7 @@ pipeline {
                 multiSelectDelimiter: ',',
                 quoteValue: false,
                 visibleItemCount: 3
-                )
+                ]
               ]
             ])
           ])
