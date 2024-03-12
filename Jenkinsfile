@@ -74,7 +74,7 @@ pipeline {
                     GET_MAINTENANCE_LIST = "{\\"
                     jsonrpc\\ ":\\"
                     2.0\\ ",\\"
-                    method\ ":\\"
+                    method\\ ":\\"
                     maintenance.get\\ ",\\"
                     params\\ ":{\\"
                     output\\ ":\\"
