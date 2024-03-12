@@ -16,7 +16,7 @@ pipeline {
                     classpath: [],
                     sandbox: true,
                     script: '''
-                        package maintenance_list
+                        
 
                         import groovy.json.JsonSlurper
                         import java.net.HttpURLConnection
@@ -260,7 +260,7 @@ pipeline {
 
                     if ( OPERATION == "CREATE") {
 
-                    MaintenanceHtml = '''
+                    MaintenanceHtml = """
 
 
                     <ul style="list-style-type:none;padding: 0;margin:0">
@@ -273,9 +273,10 @@ pipeline {
                     <br>
                       </li>
                     </ul>
-                    '''
+                    """
                     return MaintenanceHtml
                     }
+             
 
 
 
@@ -341,18 +342,18 @@ pipeline {
 
 
 
-                    def html = '''
+                    def html = """
 
                     <select id="mySelect" class="setting-input" name="value" multiple>
-                    '''
+                    """
 
                     groupslistfinal.each { option ->
                         html += "<option value='${option}'>${option}</option>"
                     }
 
-                    html += '''
+                    html += """
                     </select>
-                    '''
+                    """
 
                     return html
 
