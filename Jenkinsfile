@@ -413,7 +413,7 @@ pipeline {
               ],
               choice(
                 choices: ['CREATE','DELETE'],
-                name: 'OPTION'
+                name: 'OPERATION'
 
               ),
               [$class: 'DynamicReferenceParameter', 
@@ -551,7 +551,7 @@ pipeline {
 
         stage('Example') {
             steps {
-                echo "Selected Country: ${params.OPTION}"
+                echo "Selected Country: ${params.OPERATION}"
             }
         }
 
