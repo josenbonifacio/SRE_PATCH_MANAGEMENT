@@ -83,7 +83,52 @@ pipeline {
 
     stages {
 
+         stage('Automate Script Approval') {
+            steps {
+                script {
+                    def jobName = "DECOM"
+                    def jenkins = Jenkins.getInstanceOrNull()
 
+                    // Function to approve script
+                    def approveScript = { script ->
+                        def context = ApprovalContext.create()
+                        context.user = User.current()
+                        context.save()
+                        context.approveScript(script)
+                    }
+
+                    // Function to process Jenkinsfile content
+                    def processJenkinsfileContent = { content ->
+                        def scriptPattern = /(?s)script\s*{\s*(.*?)\s*}/
+                        def matcher = content =~ scriptPattern
+                        
+                        matcher.each { match ->
+                            approveScript(match.group(1))
+                        }
+                    }
+
+                    // Main function to automate script approval
+                    def automateScriptApproval = {
+                        def job = jenkins.getItem(jobName)
+                        if (job != null) {
+                            def configFile = job.getConfigFile()
+                            if (configFile.exists()) {
+                                def jenkinsfileContent = configFile.readToString()
+                                processJenkinsfileContent(jenkinsfileContent)
+                            } else {
+                                println "Jenkinsfile not found for job: $jobName"
+                            }
+                        } else {
+                            println "Job not found: $jobName"
+                        }
+                    }
+
+                    // Run the automation
+                    automateScriptApproval()
+                }
+            }
+        }
+    }
         stage('Example') {
             steps {
                 script {
