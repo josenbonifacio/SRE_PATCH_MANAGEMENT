@@ -34,13 +34,49 @@ pipeline {
                     import java.net.HttpURLConnection
                     import java.net.URL
                     import java.io.OutputStream
+                    import jenkins.model.*
+
+
+                    def jenkinsCredentials = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+                            com.cloudbees.plugins.credentials.Credentials.class,
+                            Jenkins.instance,
+                            null,
+                            null
+                    );
 
                     //VARIABLES
                     def api_token
-                    API_URL = "http://172.18.0.1:8081/api_jsonrpc.php";
+
+                    def API_URL
+                    def zabbixuser
+                    def zabbixpass
+
+                    for (creds in jenkinsCredentials)
+                    {
+
+
+                      if(creds.id == "zabbix_api")
+                      {
+                        API_URL = creds.secret.toString(creds.secret);
+                      }
+
+                      if(creds.id == "zabbix_user")
+                      {
+                        zabbixuser = creds.secret.toString(creds.secret);
+                      }
+
+
+                      if(creds.id == "zabbix_pass")
+                      {
+                        zabbixpass = creds.secret.toString(creds.secret);
+                      }
+
+                    }
+
+
 
                     //JSONS BODY TOKEN
-                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
 
                     //CONNECTION & GLOBAL PARAMETERS
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -124,7 +160,7 @@ pipeline {
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
 
                     //JSONS BODY TOKEN
-                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
                     
                     //CONNECTION & GLOBAL PARAMETERS
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -264,7 +300,7 @@ pipeline {
                     API_URL = "http://172.18.0.1:8081/api_jsonrpc.php";
 
                     //JSONS BODY TOKEN
-                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
 
                     //CONNECTION & GLOBAL PARAMETERS
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -338,7 +374,7 @@ pipeline {
 
                     def api_token
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
-                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
                     
                     
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -473,7 +509,7 @@ pipeline {
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
                     
                     //JSONS BODY TOKEN
-                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS = "{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
                     
                     //CONNECTION & GLOBAL PARAMETERS
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
@@ -573,7 +609,7 @@ pipeline {
                     
                     def api_token
                     API_URL="http://172.18.0.1:8081/api_jsonrpc.php";
-                    GET_TOKEN_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"Admin\\",\\"password\\":\\"zabbix\\"},\\"id\\":1,\\"auth\\":null}";
+                    GET_TOKEN_PARAMS="{\\"jsonrpc\\":\\"2.0\\",\\"method\\":\\"user.login\\",\\"params\\":{\\"user\\":\\"${zabbixuser}\\",\\"password\\":\\"${zabbixpass}\\"},\\"id\\":1,\\"auth\\":null}";
                     def con = new URL(API_URL).openConnection() as HttpURLConnection
                     
                     con.setRequestMethod("GET");

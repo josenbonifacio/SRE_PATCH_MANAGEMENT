@@ -1,4 +1,4 @@
-- hosts: zabbix
+- hosts: ${zabbixpass}
   roles:
     - role: get_token
     - role: create_maintenance

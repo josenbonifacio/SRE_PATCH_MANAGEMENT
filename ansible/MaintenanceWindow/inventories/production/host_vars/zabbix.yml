@@ -1,1 +1,6 @@
 api_url: "http://172.17.0.1:8081/api_jsonrpc.php"
+
+
+sendgrid_api_key: "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"
+sendgrid_from_email_address: "jose.bonifacio.hexa@jumia.com"
+sendgrid_to_email_addresses: "jose.bonifacio.hexa@jumia.com"
