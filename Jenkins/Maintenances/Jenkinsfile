@@ -580,6 +580,7 @@ pipeline {
                     script: '''
 
                     import groovy.json.JsonSlurper
+                    import jenkins.model.*
 
 
                     def date = new Date()
@@ -609,7 +610,7 @@ pipeline {
                     {
                     
                     //VARIABLES
-                    import jenkins.model.*
+
 
 
                     def jenkinsCredentials = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
@@ -743,11 +744,12 @@ pipeline {
                     sandbox: false, 
                     script: '''
                     import groovy.json.JsonSlurper
+                    import jenkins.model.*
 
                     if(OPERATION == "CREATE" )
                     {
                     
-                    import jenkins.model.*
+
 
 
                     def jenkinsCredentials = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
