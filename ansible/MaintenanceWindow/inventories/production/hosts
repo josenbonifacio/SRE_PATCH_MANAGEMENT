@@ -6,7 +6,7 @@ zabbix ansible_connection=local
 [win:vars]
 ansible_connection: winrm
 ansible_winrm_server_cert_validation: ignore
-ansible_user: adminuser
+ansible_user: "{{ windows_username }}"
 ansible_password: !vault |
 $ANSIBLE_VAULT;1.1;AES256
 30376566303963383162666631393035653936653839303132336162643364343236313032663463
