@@ -951,8 +951,7 @@ pipeline {
                         playbook: 'ansible/MaintenanceWindow/site.yml',
                         colorized: true,
                         inventory: 'ansible/MaintenanceWindow/inventories/production',
-                        extras: "-e 'windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'",
-                        vaultCredentialsId: 'ANSIBLE_VAULT_PASSWORD')
+                        extras: "-e 'windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'")
 
 
                 }
