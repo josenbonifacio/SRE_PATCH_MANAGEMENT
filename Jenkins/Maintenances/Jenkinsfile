@@ -4,6 +4,7 @@ pipeline {
    environment {
             zabbixu = credentials('zabbix_user')
             zabbixp = credentials('zabbix_pass')
+            zabbixapi = credentials('zabbix_api')
             windows_username= credentials('windows_username')
             ANSIBLE_VAULT_PASSWORD = credentials('ANSIBLE_VAULT_PASSWORD')
         }
@@ -947,7 +948,7 @@ pipeline {
                     playbook: 'ansible/MaintenanceWindow/site.yml',
                     colorized: true,
                     inventory: 'ansible/MaintenanceWindow/inventories/production',
-                    extras: "-e 'windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'"
+                    extras: "-e 'api_url=${zabbix_api}' -e windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'"
                     )
             }
         }
