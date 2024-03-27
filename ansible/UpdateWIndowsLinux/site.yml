@@ -1,0 +1,17 @@
+---
+- name: Main
+  hosts: windowslinux
+  gather_facts: yes
+
+  tasks:
+    - name: Check Updates Windows
+      import_playbook: check_updates_start.yml
+
+    - name: Backup Windows/Linux
+      import_playbook: backup.yml
+
+    - name: Install Updates Windows/Linux
+      import_playbook: install_updates.yml
+
+    - name: Check Updates Windows
+      import_playbook: check_updates_end.yml

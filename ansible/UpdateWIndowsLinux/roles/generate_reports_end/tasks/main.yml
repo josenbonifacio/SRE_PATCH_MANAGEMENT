@@ -1,0 +1,13 @@
+
+- name: send email via smtp
+  mail:
+    host: "smtp.gmail.com"
+    port: "587"
+    username: "{{ server_email }}"
+    password: "{{ mail_server_pass }}"
+    sender: "{{ server_email }}"
+    to: "{{ destination_email }}"
+    subject: "[Ansible] Windows Update report"
+    body: "{{ lookup('template', 'update_report_end.html.j2') }}"
+    subtype: html
+  delegate_to: localhost

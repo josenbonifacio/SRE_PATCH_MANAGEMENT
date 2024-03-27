@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>After Update - Report Table for Windows Updates per Host</title>
+   </head>
+
+   <body>
+      <table border = "1" cellpadding = "5" cellspacing = "5">
+        <caption>Available and Approved Updates (Reported from WSUS Server:  {{ wsus_server }})</caption>
+         <tr>
+            <th>Windows Host</th>
+            <th>OS</th>
+            <th>List of Required Updates/Packages</th>
+         </tr>
+{% for host in ansible_play_hosts %}
+         <tr>
+            <td>{{ host }}</td>
+            <td>{{ hostvars[host].ansible_distribution }}</td>
+            <td>
+               <ul>
+{% if hostvars[host].available_updates_end.updates is defined and hostvars[host].available_updates_end.found_update_count|int > 0  %}
+{% if hostvars[host].available_updates_end.updates is mapping %}
+{% for update in hostvars[host].available_updates_end.updates.values() %}
+                  <li>{{ update.title }}</li>
+{% endfor %}
+{% else %}
+{% for update in hostvars[host].available_updates_end.updates %}
+                  <li>{{ update.title }}</li>
+{% endfor %}
+{% endif %}
+{% else %}
+                  <li>Compliant</li>
+{% endif %}
+               </ul>
+            </td>
+         </tr>
+{% endfor %}
+      </table>
+   </body>
+</html>

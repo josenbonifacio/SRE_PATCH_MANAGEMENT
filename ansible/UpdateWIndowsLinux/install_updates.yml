@@ -1,0 +1,74 @@
+---
+- name: Update Windows and Linux hosts
+  hosts: windowslinux
+  gather_facts: yes
+  tasks:
+    - name: Check if it's a Windows host
+      set_fact:
+        is_windows: "{{ ansible_os_family == 'Windows' }}"
+
+    - name: Update Windows host and reboot if necessary
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+          - UpdateRollups
+        state: installed
+      when: is_windows and not reboot_status.reboot_required | default(false)
+
+    - name: Reboot Windows host if updates required
+      win_reboot:
+      when: is_windows and reboot_status.reboot_required | default(false)
+
+    - name: Wait for Windows host to reboot
+      wait_for_connection:
+        delay: 30
+        timeout: 300
+      when: is_windows and reboot_status.reboot_required | default(false)
+
+    - name: Validate Windows host boots
+      win_ping:
+      when: is_windows and reboot_status.reboot_required | default(false)
+
+    - name: Update Linux package cache
+      apt:
+        update_cache: yes
+      when: not is_windows
+
+    - name: Upgrade Linux packages
+      apt:
+        upgrade: yes
+      when: not is_windows
+
+
+- name: Update Linux packages and check if reboot is required
+  hosts: linux
+  gather_facts: yes
+  tasks:
+    - name: Update Linux package cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade Linux packages
+      apt:
+        upgrade: yes
+      register: upgrade_result
+
+- name: Reboot if necessary
+  hosts: linux
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: Reboot if upgrade required
+      reboot:
+      when: upgrade_result.reboot_required
+
+- name: Wait for host to boot
+  hosts: linux
+  gather_facts: no
+  tasks:
+    - name: Wait for host to boot
+      wait_for_connection:
+        delay: 30
+        timeout: 300
+      when: upgrade_result.reboot_required

@@ -1,0 +1,29 @@
+
+- name: Check Windows Updates
+  hosts: win
+  vars:
+    win_update_category_names:
+      - CriticalUpdates
+      - DefinitionUpdates
+      - SecurityUpdates
+      - UpdateRollups
+      - Updates
+
+
+  tasks:
+    - name: check for available updates
+      win_updates:
+        category_names: "{{ win_update_category_names }}"
+        state: searched
+      register: available_updates_start
+
+- name: Generate Report
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: generate html
+      include_role:
+        name: generate_reports_start
+      run_once: yes
+

@@ -1,0 +1,33 @@
+
+
+[win]
+windows-01 192.160.0.11
+windows-02 192.168.0.12
+windows-03 192.168.0.13
+windows-04 192.168.0.16
+
+
+nodecluster ansible_host=10.0.1.12 ansible_user=adminuser ansible_password=Teste2024!!!
+
+[linux]
+linux 192.168.0.40
+
+[win:vars]
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
+ansible_user: Administrator
+ansible_password: Teste2024!!!
+server_email: bonvinhas@gmail.com
+destination_email: jbonifacio85@gmail.com
+mail_server_pass: "omfv uzsd sjqy mthj"
+wsus_server: "192.168.0.14"
+
+[linux:vars]
+ansible_connection=ssh
+ansible_user=sreadmin
+ansible_ssh_pass=Teste2024!!!
+
+
+[windowslinux:children]
+win
+linux

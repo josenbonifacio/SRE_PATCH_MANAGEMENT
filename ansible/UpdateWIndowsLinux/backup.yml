@@ -1,0 +1,14 @@
+- name: Create checkpoint for VM in a cluster group
+  hosts: windowslinux
+  gather_facts: no
+  tasks:
+    - name: Execute PowerShell script to create checkpoint for VM
+      ansible.windows.win_shell:  |
+        $VMNAME="{{ inventory_hostname }}"
+        $VMNAME_DETAILS=Get-ClusterResource | Where-Object { $_.ResourceType -eq "Virtual Machine" -and $_.OwnerGroup -eq $VMNAME } | Select-Object Name, OwnerNode
+        $session=New-PSSession -ComputerName $VMNAME_DETAILS.OwnerNode
+        Invoke-Command -Session $session -ScriptBlock {
+        param($VMNAME)
+        Checkpoint-VM -Name $VMNAME -SnapshotName $VMNAME
+        } -ArgumentList $VMNAME
+      delegate_to: nodecluster

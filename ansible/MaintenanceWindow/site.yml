@@ -1,8 +1,8 @@
-- hosts: all
-  import_playbook: check_updates.yml
- # roles:
- #   - role: get_token
- #   - role: create_maintenance
- #     when: OPERATION == 'CREATE'
- #   - role: delete_maintenance
- #     when: OPERATION == 'DELETE'
+- hosts: jenkins
+
+  roles:
+    - role: get_token
+    - role: create_maintenance
+      when: OPERATION == 'CREATE'
+    - role: delete_maintenance
+      when: OPERATION == 'DELETE'
