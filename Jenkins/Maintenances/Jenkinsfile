@@ -932,11 +932,7 @@ pipeline {
       }
     }
 
-        stage('Example') {
-            steps {
-                echo "Selected Country: ${params.OPERATION}"
-            }
-        }
+
     stage('Git Checkout'){
             steps{
                 checkout scm
@@ -944,20 +940,19 @@ pipeline {
          
         }
 
-        stage('Execute Ansible'){
-            steps{
-                ansiColor('xterm') {
-                    ansiblePlaybook(
-                        playbook: 'ansible/MaintenanceWindow/site.yml',
-                        colorized: true,
-                        inventory: 'ansible/MaintenanceWindow/inventories/production',
-                        extras: "-e 'windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'")
-
-
-                }
-            }    
-
+    stage('Execute Ansible'){
+        steps{
+            ansiColor('xterm') {
+                ansiblePlaybook(
+                    playbook: 'ansible/MaintenanceWindow/site.yml',
+                    colorized: true,
+                    inventory: 'ansible/MaintenanceWindow/inventories/production',
+                    extras: "-e 'windows_username=${windows_username}' -e 'OPERATION=${OPERATION}'  -e 'zabbix_username=${zabbixu}' -e 'zabbix_password=${zabbixp}' -e 'options=\"${OPTIONS}\"' -e 'group_pick=\"${GROUP_PICK}\"' -e 'details_maintenance=\"${DETAILS_MAINTENANCE}\"'"
+                    )
+            }
         }
+
+    }
     
   }
   
